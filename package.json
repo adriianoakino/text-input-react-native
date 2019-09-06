@@ -2,6 +2,7 @@
   "name": "text-input-react-native",
   "version": "1.0.0",
   "description": "",
+  "main": "index.js",
   "keywords": [
     "react-native",
     "android",
