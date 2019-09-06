@@ -1,0 +1,17 @@
+{
+  "name": "text-input-react-native",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "react-native",
+    "android",
+    "text-input",
+    "secure",
+    "password"
+  ],
+  "peerDependencies": {
+    "react-native": ">=v0.18.0"
+  },
+  "author": "adriianoakino",
+  "license": "MIT"
+}
