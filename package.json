@@ -10,9 +10,7 @@
     "secure",
     "password"
   ],
-  "peerDependencies": {
-    "react-native": ">=v0.18.0"
-  },
+  
   "author": "adriianoakino",
   "license": "MIT"
 }

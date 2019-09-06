@@ -1,8 +1,9 @@
 /* import { NativeModules } from 'react-native'; 
 export default NativeModules.RNMyEditText; */
-/* 
+
 import {requireNativeComponent} from 'react-native';
-module.exports = requireNativeComponent('RNMyEditText'); */
+module.exports = requireNativeComponent('RNMyEditText'); 
+
 'use strict';
 
 var DocumentSelectionState = require('DocumentSelectionState');
@@ -588,5 +589,3 @@ var styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
-
-module.exports = RNMyEditText;
