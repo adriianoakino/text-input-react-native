@@ -8,11 +8,16 @@ import android.text.InputType;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.TextView;
+
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -43,7 +48,7 @@ import javax.annotation.Nullable;
 public class RNEditTextManager extends
         BaseViewManager<ReactEditText, LayoutShadowNode> {
 
-    private static final String MY_EVENT_NAME  = "myOnChangeEvent";
+    private static final String MY_EVENT_NAME = "myOnChangeEvent";
     private static final String MY_REACT_CLASS = "RNMyEditText";
 
     private static final int FOCUS_TEXT_INPUT = 1;
@@ -65,13 +70,55 @@ public class RNEditTextManager extends
 
     @Override
     public ReactEditText createViewInstance(ThemedReactContext context) {
-        ReactEditText editText = new ReactEditText(context);
+        final ReactEditText editText = new ReactEditText(context);
         int inputType = editText.getInputType();
-        editText.setInputType(inputType & (~InputType.TYPE_TEXT_FLAG_MULTI_LINE));
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editText.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                (int) Math.ceil(PixelUtil.toPixelFromSP(ViewDefaults.FONT_SIZE_SP)));
+        //editText.setInputType(inputType & (~InputType.TYPE_TEXT_FLAG_MULTI_LINE));
+        //editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
+                EditorInfo.IME_FLAG_NO_ENTER_ACTION | EditorInfo.TYPE_TEXT_FLAG_IME_MULTI_LINE);
+
+        editText.setSingleLine(false);
+
+        editText.setLongClickable(false);
+
+        editText.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(editText.getLineCount() > 5) {
+                    int y = (editText.getLineCount() - 6) * editText.getLineHeight();
+                    editText.scrollTo(0, y);
+                }
+            }
+        });
+
+        editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) { return false; }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) { return false; }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) { return false; }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) { }
+
+        });
+
         return editText;
     }
 
@@ -119,7 +166,8 @@ public class RNEditTextManager extends
     }
 
     @Override
-    public @Nullable Map<String, Integer> getCommandsMap() {
+    public @Nullable
+    Map<String, Integer> getCommandsMap() {
         return MapBuilder.of("focusTextInput", FOCUS_TEXT_INPUT, "blurTextInput", BLUR_TEXT_INPUT);
     }
 
@@ -165,6 +213,11 @@ public class RNEditTextManager extends
                 (int) Math.ceil(PixelUtil.toPixelFromSP(fontSize)));
     }
 
+    @ReactProp(name = "value")
+    public void setValue(final ReactEditText view, String text) {
+        view.setText(text);
+    }
+
     @ReactProp(name = "onSelectionChange", defaultBoolean = false)
     public void setOnSelectionChange(final ReactEditText view, boolean onSelectionChange) {
         if (onSelectionChange) {
@@ -207,7 +260,7 @@ public class RNEditTextManager extends
     }
 
     // Bamlab: This is the added method see https://github.com/facebook/react-native/pull/6064
-    @ReactProp(name = ViewProps.COLOR, defaultInt = 0, customType="color")
+    @ReactProp(name = ViewProps.COLOR, defaultInt = 0, customType = "color")
     public void setColor(ReactEditText view, @Nullable Integer color) {
         view.setTextColor(color);
     }
@@ -227,6 +280,7 @@ public class RNEditTextManager extends
             throw new JSApplicationIllegalArgumentException("Invalid textAlign: " + textAlign);
         }
     }
+
 
     @ReactProp(name = ViewProps.TEXT_ALIGN_VERTICAL)
     public void setTextAlignVertical(ReactEditText view, @Nullable String textAlignVertical) {
@@ -255,7 +309,7 @@ public class RNEditTextManager extends
 
     @ReactProp(name = "maxLength")
     public void setMaxLength(ReactEditText view, @Nullable Integer maxLength) {
-        InputFilter [] currentFilters = view.getFilters();
+        InputFilter[] currentFilters = view.getFilters();
         InputFilter[] newFilters = EMPTY_FILTERS;
 
         if (maxLength == null) {
@@ -533,7 +587,8 @@ public class RNEditTextManager extends
     }
 
     @Override
-    public @Nullable Map getExportedViewConstants() {
+    public @Nullable
+    Map getExportedViewConstants() {
         return MapBuilder.of(
                 "AutoCapitalizationType",
                 MapBuilder.of(

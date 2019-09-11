@@ -1,9 +1,5 @@
 package com.adriianoakino.views;
 
-import javax.annotation.Nullable;
-
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -21,13 +17,16 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.views.text.CustomStyleSpan;
 import com.facebook.react.views.text.ReactTagSpan;
 import com.facebook.react.views.text.ReactTextUpdate;
 import com.facebook.react.views.text.TextInlineImageSpan;
+
+import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 /**
  * A wrapper around the EditText that lets us better control what happens when an EditText gets
@@ -242,11 +241,11 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
         Object[] spans = getText().getSpans(0, length(), Object.class);
         for (int spanIdx = 0; spanIdx < spans.length; spanIdx++) {
             // Remove all styling spans we might have previously set
-            if (ForegroundColorSpan.class.isInstance(spans[spanIdx]) ||
-                    BackgroundColorSpan.class.isInstance(spans[spanIdx]) ||
-                    AbsoluteSizeSpan.class.isInstance(spans[spanIdx]) ||
-                    CustomStyleSpan.class.isInstance(spans[spanIdx]) ||
-                    ReactTagSpan.class.isInstance(spans[spanIdx])) {
+            if (spans[spanIdx] instanceof ForegroundColorSpan ||
+                    spans[spanIdx] instanceof BackgroundColorSpan ||
+                    spans[spanIdx] instanceof AbsoluteSizeSpan ||
+                    spans[spanIdx] instanceof CustomStyleSpan ||
+                    spans[spanIdx] instanceof ReactTagSpan) {
                 getText().removeSpan(spans[spanIdx]);
             }
 
@@ -318,7 +317,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     @Override
     protected boolean verifyDrawable(Drawable drawable) {
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 if (span.getDrawable() == drawable) {
@@ -332,7 +331,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     @Override
     public void invalidateDrawable(Drawable drawable) {
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 if (span.getDrawable() == drawable) {
@@ -347,7 +346,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 span.onDetachedFromWindow();
@@ -359,7 +358,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     public void onStartTemporaryDetach() {
         super.onStartTemporaryDetach();
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 span.onStartTemporaryDetach();
@@ -371,7 +370,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 span.onAttachedToWindow();
@@ -383,7 +382,7 @@ public class ReactEditText extends android.support.v7.widget.AppCompatEditText {
     public void onFinishTemporaryDetach() {
         super.onFinishTemporaryDetach();
         if (mContainsImages && getText() instanceof Spanned) {
-            Spanned text = (Spanned) getText();
+            Spanned text = getText();
             TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
             for (TextInlineImageSpan span : spans) {
                 span.onFinishTemporaryDetach();

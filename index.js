@@ -1,30 +1,36 @@
 /* import { NativeModules } from 'react-native'; 
 export default NativeModules.RNMyEditText; */
 
-import {requireNativeComponent} from 'react-native';
-module.exports = requireNativeComponent('RNMyEditText'); 
+/* import {requireNativeComponent} from 'react-native';
+module.exports = requireNativeComponent('RNMyEditText');  */
 
 'use strict';
+import { DocumentSelectionState, EventEmitter, NativeMethodsMixin, Platform,
+  StyleSheet, Text, TextInputState, TimerMixin, TouchableWithoutFeedback,
+  UIManager , View, emptyFunction, requireNativeComponent } from 'react-native';
+import PropTypes from 'prop-types'
+import * as React  from 'react';
+var CreateReactClass = require('create-react-class');
+var invariant = require('invariant');
+//var DocumentSelectionState = require('DocumentSelectionState');
+//var EventEmitter = require('EventEmitter');
+//var NativeMethodsMixin = require('NativeMethodsMixin');
+//var Platform = require('Platform');
+//var PropTypes = require('ReactPropTypes');
+//var React = require('React');
+//var ReactChildren = require('ReactChildren');
+//var StyleSheet = require('StyleSheet');
+//var Text = require('Text');
+//var TextInputState = require('TextInputState');
+//var TimerMixin = require('react-native/node_modules/react-timer-mixin');
+//var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
+//var UIManager = require('UIManager');
+//var View = require('View');
 
-var DocumentSelectionState = require('DocumentSelectionState');
-var EventEmitter = require('EventEmitter');
-var NativeMethodsMixin = require('NativeMethodsMixin');
-var Platform = require('Platform');
-var PropTypes = require('ReactPropTypes');
-var React = require('React');
-var ReactChildren = require('ReactChildren');
-var StyleSheet = require('StyleSheet');
-var Text = require('Text');
-var TextInputState = require('TextInputState');
-var TimerMixin = require('react-native/node_modules/react-timer-mixin');
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var UIManager = require('UIManager');
-var View = require('View');
-
-var createReactNativeComponentClass = require('createReactNativeComponentClass');
-var emptyFunction = require('react-native/node_modules/fbjs/lib/emptyFunction');
-var invariant = require('react-native/node_modules/fbjs/lib/invariant');
-var requireNativeComponent = require('requireNativeComponent');
+//var createReactNativeComponentClass = require('createReactNativeComponentClass');
+//var emptyFunction = require('react-native/node_modules/fbjs/lib/emptyFunction');
+//var invariant = require('react-native/node_modules/fbjs/lib/invariant');
+//var requireNativeComponent = require('requireNativeComponent');
 
 var onlyMultiline = {
   onTextInput: true, // not supported in Open Source yet
@@ -37,7 +43,7 @@ var notMultiline = {
 
 if (Platform.OS === 'android') {
   // Bamlab: This is the only changed line.
-  var AndroidTextInput = requireNativeComponent('RNMyEditText', null);
+  var AndroidTextInput = requireNativeComponent('RNMyEditText');
   // ---
 } else if (Platform.OS === 'ios') {
   //var RCTTextView = requireNativeComponent('RCTTextView', null);
@@ -67,7 +73,7 @@ type Event = Object;
  *
  * Note that some props are only available with `multiline={true/false}`:
  */
-var TextInput = React.createClass({
+var RNMyEditText = CreateReactClass({
   statics: {
     /* TODO(brentvatne) docs are needed for this */
     State: TextInputState,
@@ -313,8 +319,8 @@ var TextInput = React.createClass({
   },
 
   contextTypes: {
-    onFocusRequested: React.PropTypes.func,
-    focusEmitter: React.PropTypes.instanceOf(EventEmitter),
+    onFocusRequested: PropTypes.func,
+    focusEmitter: PropTypes.instanceOf(EventEmitter),
   },
 
   _focusSubscription: (undefined: ?Function),
@@ -353,7 +359,7 @@ var TextInput = React.createClass({
   },
 
   childContextTypes: {
-    isInAParentText: React.PropTypes.bool
+    isInAParentText: PropTypes.bool
   },
 
   clear: function() {
@@ -420,7 +426,7 @@ var TextInput = React.createClass({
 
       var children = props.children;
       var childCount = 0;
-      ReactChildren.forEach(children, () => ++childCount);
+     React.Children.forEach(children, () => ++childCount);
       invariant(
         !(props.value && childCount),
         'Cannot specify both value and children.'
@@ -445,7 +451,7 @@ var TextInput = React.createClass({
           text={this._getText()}
         />;
     }
-
+    
     return (
       <TouchableWithoutFeedback
         onPress={this._onPress}
@@ -475,7 +481,7 @@ var TextInput = React.createClass({
       UIManager.AndroidTextInput.Constants.AutoCapitalizationType[this.props.autoCapitalize];
     var children = this.props.children;
     var childCount = 0;
-    ReactChildren.forEach(children, () => ++childCount);
+    React.Children.forEach(children, () => ++childCount);
     invariant(
       !(this.props.value && childCount),
       'Cannot specify both value and children.'
@@ -589,3 +595,6 @@ var styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
 });
+
+module.exports = RNMyEditText;
+//export default RNMyEditText;

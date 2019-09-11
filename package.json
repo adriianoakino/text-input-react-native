@@ -10,7 +10,10 @@
     "secure",
     "password"
   ],
-  
   "author": "adriianoakino",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "create-react-class": "^15.6.3",
+    "invariant": "^2.2.4"
+  }
 }
